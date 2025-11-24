@@ -32,12 +32,12 @@
             <tr>
                 <th>ID</th>
                 <th>Año</th>
-                <th>Ayuntamiento</th>
+                <th>Municipio</th>
                 <th>Cargo</th>
+                <th>Teniente</th>
                 <th>Nombre</th>
                 <th>Nacimiento</th>
                 <th>Nombramiento</th>
-                <th>Edad</th>
                 <th>COD_INE</th>
             </tr>
         </thead>
@@ -55,54 +55,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
     <script>
-        // URL del CSV - SUBE EL ARCHIVO certificados_girona_limpio.csv A TU REPOSITORIO
-        // Y CAMBIA ESTA URL POR LA CORRECTA
-        const csvUrl = 'https://raw.githubusercontent.com/mario-lozano/GironaMayorsBeta/main/certificados_girona_limpio.csv';
+        // URL del CSV - Cambia 'certificados_girona_v_3_2_github_muestra.csv' por el nombre de tu archivo
+        const csvUrl = 'https://raw.githubusercontent.com/mario-lozano/GironaMayorsBeta/main/certificados_girona_v_3_2_github_muestra.csv';
         
-        console.log('Intentando cargar CSV desde:', csvUrl);
+        console.log('Cargando CSV desde:', csvUrl);
         
-        // Cargar el CSV con UTF-8 (el archivo limpio está en UTF-8)
+        // Cargar el CSV
         fetch(csvUrl)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('El archivo no se encuentra. Verifica que esté subido a GitHub y que el repositorio sea público.');
+                    throw new Error('Archivo no encontrado. Verifica que esté subido y que el repositorio sea público.');
                 }
-                return response.arrayBuffer();
+                return response.text();  // Como es UTF-8, podemos usar .text() directamente
             })
-            .then(buffer => {
-                // Decodificar con UTF-8
-                const decoder = new TextDecoder('utf-8');
-                const csvText = decoder.decode(buffer);
+            .then(csvText => {
+                console.log('CSV descargado, tamaño:', csvText.length, 'caracteres');
                 
-                console.log('CSV descargado. Tamaño:', csvText.length, 'caracteres');
-                console.log('Primeras líneas:', csvText.substring(0, 300));
-                
-                // Parsear el texto con Papa Parse
+                // Parsear el CSV
                 Papa.parse(csvText, {
                     header: true,
                     delimiter: ";",
                     skipEmptyLines: true,
                     complete: function(results) {
-                        console.log('CSV parseado correctamente. Registros:', results.data.length);
-                        console.log('Primera fila de ejemplo:', results.data[0]);
+                        console.log('CSV parseado. Registros:', results.data.length);
+                        console.log('Columnas:', Object.keys(results.data[0]));
+                        console.log('Primera fila:', results.data[0]);
                         
                         if (results.data.length === 0) {
                             document.getElementById('loader').innerHTML = 
-                                'Error: El archivo CSV está vacío o no se pudo leer correctamente.';
+                                'Error: El archivo está vacío';
                             return;
                         }
                         
-                        // Preparar datos para la tabla
+                        // Preparar datos para la tabla usando las columnas correctas
                         const datos = results.data.map(row => [
-                            row.ID || '',
-                            row['Año'] || row.Ano || '',
-                            row.Ayuntamiento || '',
-                            row.Cargo || '',
-                            row.Nombre || '',
-                            row.Nacimiento || '',
-                            row.Nombramiento || '',
-                            row.Edad || '',
-                            row.COD_INE || ''
+                            row.id || '',
+                            row['año_documento'] || row.año_documento || '',
+                            row.municipio || '',
+                            row.cargo || '',
+                            row.teniente || '',
+                            row.nombre_corregido || row.nombre_original || '',
+                            row.nacimiento || '',
+                            row.nombramiento || '',
+                            row.cod_ine || ''
                         ]);
                         
                         // Ocultar loader y mostrar tabla
@@ -114,27 +109,28 @@
                             data: datos,
                             language: {
                                 url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                            }
+                            },
+                            order: [[1, 'desc']]  // Ordenar por año descendente por defecto
                         });
                         
-                        console.log('✓ Tabla creada exitosamente');
+                        console.log('✓ Tabla creada correctamente');
                     },
                     error: function(error) {
-                        console.error('Error al parsear CSV:', error);
+                        console.error('Error al parsear:', error);
                         document.getElementById('loader').innerHTML = 
-                            'Error al procesar los datos: ' + (error.message || 'Desconocido');
+                            'Error al procesar: ' + error.message;
                     }
                 });
             })
             .catch(error => {
-                console.error('Error al cargar CSV:', error);
+                console.error('Error:', error);
                 document.getElementById('loader').innerHTML = 
-                    'Error al cargar los datos: ' + error.message + '<br><br>' +
+                    'Error: ' + error.message + '<br><br>' +
                     '<strong>Verifica:</strong><br>' +
-                    '1. Que el repositorio sea <strong>público</strong><br>' +
-                    '2. Que el archivo esté subido en GitHub<br>' +
-                    '3. Que el nombre del archivo coincida exactamente<br><br>' +
-                    'URL intentada: <a href="' + csvUrl + '" target="_blank">' + csvUrl + '</a>';
+                    '1. Repositorio público<br>' +
+                    '2. Archivo subido correctamente<br>' +
+                    '3. Nombre correcto: certificados_girona_v_3_2_github_muestra.csv<br><br>' +
+                    '<a href="' + csvUrl + '" target="_blank">Probar URL</a>';
             });
     </script>
 </body>
