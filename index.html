@@ -5,73 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alcaldes y Concejales de Girona</title>
     
-    <!-- CSS de DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f5f5f5;
         }
         h1 {
             color: #333;
+            text-align: center;
         }
         #loader {
             text-align: center;
             padding: 20px;
+            font-size: 18px;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-    <h1>Alcaldes y Concejales de Girona</h1>
+    <div class="container">
+        <h1>Alcaldes y Concejales de Girona</h1>
+        
+        <div id="loader">Cargando datos...</div>
+        
+        <table id="tabla-alcaldes" class="display" style="width:100%; display:none;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Año</th>
+                    <th>Municipio</th>
+                    <th>Cargo</th>
+                    <th>Nombre</th>
+                    <th>Nacimiento</th>
+                    <th>Nombramiento</th>
+                    <th>Censo Hecho</th>
+                    <th>COD_INE</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
     
-    <div id="loader">Cargando datos...</div>
-    
-    <table id="tabla-alcaldes" class="display" style="width:100%; display:none;">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Año</th>
-                <th>Ayuntamiento</th>
-                <th>Cargo</th>
-                <th>Nombre</th>
-                <th>Nacimiento</th>
-                <th>Nombramiento</th>
-                <th>Edad</th>
-                <th>COD_INE</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    
-    <!-- DataTables -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    
-    <!-- Papa Parse para leer CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
     <script>
-        // URL del CSV 
-        const csvUrl = "https://github.com/mario-lozano/GironaMayorsBeta/raw/refs/heads/main/certificados_%20girona_v.3.2_github_muestra.csv";
+        // URL del CSV en tu repositorio de GitHub
+        const csvUrl = "https://github.com/mario-lozano/GironaMayorsBeta/raw/refs/heads/main/certificados__girona_v_3_2_github_muestra.csv";
         
-        console.log('Intentando cargar CSV desde:', csvUrl);
+        console.log('Cargando CSV desde:', csvUrl);
         
-        // Cargar con Papa Parse directamente - deja que el navegador maneje el encoding
+        // Cargar el CSV con Papa Parse
         Papa.parse(csvUrl, {
             download: true,
             header: true,
-            delimiter: ";",
+            delimiter: ";",  // Tu CSV usa punto y coma como separador
             skipEmptyLines: true,
+            encoding: "UTF-8",
             complete: function(results) {
-                console.log('CSV cargado. Registros:', results.data.length);
+                console.log('CSV cargado exitosamente');
+                console.log('Total de registros:', results.data.length);
                 
-                // Mostrar una muestra en consola para debug
+                // Mostrar primera fila para debug
                 if (results.data.length > 0) {
                     console.log('Primera fila:', results.data[0]);
+                    console.log('Columnas disponibles:', Object.keys(results.data[0]));
                 }
                 
                 if (results.data.length === 0) {
@@ -80,35 +90,39 @@
                     return;
                 }
                 
-                // Preparar datos para la tabla
+                // Preparar datos para la tabla usando los nombres CORRECTOS de columnas
                 const datos = results.data.map(row => [
-                    row.ID || '',
-                    row['Año'] || row.Ano || '',
-                    row.Ayuntamiento || '',
-                    row.Cargo || '',
-                    row.Nombre || '',
-                    row.Nacimiento || '',
-                    row.Nombramiento || '',
-                    row.Edad || '',
-                    row.COD_INE || ''
+                    row.id || '',                           // ID
+                    row['año_documento'] || '',             // Año
+                    row.municipio || '',                     // Municipio (antes era "Ayuntamiento")
+                    row.cargo || '',                         // Cargo
+                    row.nombre_corregido || row.nombre_original || '',  // Nombre
+                    row.nacimiento || '',                    // Nacimiento
+                    row.nombramiento || '',                  // Nombramiento
+                    row.censo_hecho || '',                   // Censo Hecho (población)
+                    row.cod_ine || ''                        // COD_INE
                 ]);
                 
                 // Ocultar loader y mostrar tabla
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('tabla-alcaldes').style.display = 'table';
                 
-                // Inicializar DataTables
+                // Inicializar DataTables con configuración en español
                 $('#tabla-alcaldes').DataTable({
                     data: datos,
+                    pageLength: 25,  // Mostrar 25 registros por página
                     language: {
                         url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                    }
+                    },
+                    order: [[1, 'desc'], [2, 'asc']]  // Ordenar por año (desc) y municipio (asc)
                 });
+                
+                console.log('Tabla inicializada correctamente con', datos.length, 'registros');
             },
             error: function(error) {
-                console.error('Error:', error);
+                console.error('Error al cargar CSV:', error);
                 document.getElementById('loader').innerHTML = 
-                    'Error al cargar los datos: ' + (error.message || 'Desconocido');
+                    'Error al cargar los datos: ' + (error.message || 'Error desconocido. Verifica la URL del archivo.');
             }
         });
     </script>
