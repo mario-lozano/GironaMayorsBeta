@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alcaldes y Concejales de Girona</title>
+    
+    <!-- CSS de DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #loader {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Alcaldes y Concejales de Girona</h1>
+    
+    <div id="loader">Cargando datos...</div>
+    
+    <table id="tabla-alcaldes" class="display" style="width:100%; display:none;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Año</th>
+                <th>Ayuntamiento</th>
+                <th>Cargo</th>
+                <th>Nombre</th>
+                <th>Nacimiento</th>
+                <th>Nombramiento</th>
+                <th>Edad</th>
+                <th>COD_INE</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    
+    <!-- Papa Parse para leer CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <script>
+        // URL del CSV 
+        const csvUrl = "https://github.com/mario-lozano/GironaMayorsBeta/raw/refs/heads/main/certificados_%20girona_v.3.2_github_muestra.xlsx";
+        
+        console.log('Intentando cargar CSV desde:', csvUrl);
+        
+        // Cargar con Papa Parse directamente - deja que el navegador maneje el encoding
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            delimiter: ";",
+            skipEmptyLines: true,
+            complete: function(results) {
+                console.log('CSV cargado. Registros:', results.data.length);
+                
+                // Mostrar una muestra en consola para debug
+                if (results.data.length > 0) {
+                    console.log('Primera fila:', results.data[0]);
+                }
+                
+                if (results.data.length === 0) {
+                    document.getElementById('loader').innerHTML = 
+                        'Error: El archivo CSV está vacío.';
+                    return;
+                }
+                
+                // Preparar datos para la tabla
+                const datos = results.data.map(row => [
+                    row.ID || '',
+                    row['Año'] || row.Ano || '',
+                    row.Ayuntamiento || '',
+                    row.Cargo || '',
+                    row.Nombre || '',
+                    row.Nacimiento || '',
+                    row.Nombramiento || '',
+                    row.Edad || '',
+                    row.COD_INE || ''
+                ]);
+                
+                // Ocultar loader y mostrar tabla
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('tabla-alcaldes').style.display = 'table';
+                
+                // Inicializar DataTables
+                $('#tabla-alcaldes').DataTable({
+                    data: datos,
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    }
+                });
+            },
+            error: function(error) {
+                console.error('Error:', error);
+                document.getElementById('loader').innerHTML = 
+                    'Error al cargar los datos: ' + (error.message || 'Desconocido');
+            }
+        });
+    </script>
+</body>
+</html>
