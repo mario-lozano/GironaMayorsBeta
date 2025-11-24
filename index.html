@@ -62,67 +62,68 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
     <script>
-        // URL del CSV en tu repositorio de GitHub
-        const csvUrl = "https://github.com/mario-lozano/GironaMayorsBeta/raw/refs/heads/main/certificados__girona_v_3_2_github_muestra.csv";
+        // IMPORTANTE: Usa jsDelivr en lugar de raw.githubusercontent.com
+        // Formato: https://cdn.jsdelivr.net/gh/USUARIO/REPOSITORIO@RAMA/ARCHIVO
+        const csvUrl = "https://cdn.jsdelivr.net/gh/mario-lozano/GironaMayorsBeta@main/certificados__girona_v_3_2_github_muestra.csv";
         
         console.log('Cargando CSV desde:', csvUrl);
         
-        // Cargar el CSV con Papa Parse
         Papa.parse(csvUrl, {
             download: true,
             header: true,
-            delimiter: ";",  // Tu CSV usa punto y coma como separador
+            delimiter: ";",
             skipEmptyLines: true,
             encoding: "UTF-8",
             complete: function(results) {
-                console.log('CSV cargado exitosamente');
+                console.log('✓ CSV cargado exitosamente');
                 console.log('Total de registros:', results.data.length);
                 
-                // Mostrar primera fila para debug
                 if (results.data.length > 0) {
                     console.log('Primera fila:', results.data[0]);
-                    console.log('Columnas disponibles:', Object.keys(results.data[0]));
                 }
                 
                 if (results.data.length === 0) {
                     document.getElementById('loader').innerHTML = 
-                        'Error: El archivo CSV está vacío.';
+                        '⚠️ Error: El archivo CSV está vacío.';
                     return;
                 }
                 
-                // Preparar datos para la tabla usando los nombres CORRECTOS de columnas
+                // Preparar datos para la tabla
                 const datos = results.data.map(row => [
-                    row.id || '',                           // ID
-                    row['año_documento'] || '',             // Año
-                    row.municipio || '',                     // Municipio (antes era "Ayuntamiento")
-                    row.cargo || '',                         // Cargo
-                    row.nombre_corregido || row.nombre_original || '',  // Nombre
-                    row.nacimiento || '',                    // Nacimiento
-                    row.nombramiento || '',                  // Nombramiento
-                    row.censo_hecho || '',                   // Censo Hecho (población)
-                    row.cod_ine || ''                        // COD_INE
+                    row.id || '',
+                    row['año_documento'] || '',
+                    row.municipio || '',
+                    row.cargo || '',
+                    row.nombre_corregido || row.nombre_original || '',
+                    row.nacimiento || '',
+                    row.nombramiento || '',
+                    row.censo_hecho || '',
+                    row.cod_ine || ''
                 ]);
                 
                 // Ocultar loader y mostrar tabla
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('tabla-alcaldes').style.display = 'table';
                 
-                // Inicializar DataTables con configuración en español
+                // Inicializar DataTables
                 $('#tabla-alcaldes').DataTable({
                     data: datos,
-                    pageLength: 25,  // Mostrar 25 registros por página
+                    pageLength: 25,
                     language: {
                         url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                     },
-                    order: [[1, 'desc'], [2, 'asc']]  // Ordenar por año (desc) y municipio (asc)
+                    order: [[1, 'desc'], [2, 'asc']]
                 });
                 
-                console.log('Tabla inicializada correctamente con', datos.length, 'registros');
+                console.log('✓ Tabla inicializada con', datos.length, 'registros');
             },
             error: function(error) {
-                console.error('Error al cargar CSV:', error);
+                console.error('✗ Error al cargar CSV:', error);
                 document.getElementById('loader').innerHTML = 
-                    'Error al cargar los datos: ' + (error.message || 'Error desconocido. Verifica la URL del archivo.');
+                    '⚠️ Error al cargar los datos. Verifica:<br>' +
+                    '1. Que el archivo existe en GitHub<br>' +
+                    '2. Que el repositorio es público<br>' +
+                    '3. Que el nombre del archivo es correcto';
             }
         });
     </script>
