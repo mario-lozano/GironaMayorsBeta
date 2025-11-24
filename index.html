@@ -20,6 +20,15 @@
             text-align: center;
             padding: 20px;
         }
+        /* Estilos para los inputs de filtro */
+        tfoot input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+        tfoot {
+            display: table-header-group;
+        }
     </style>
 </head>
 <body>
@@ -41,6 +50,19 @@
                 <th>COD_INE</th>
             </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Año</th>
+                <th>Municipio</th>
+                <th>Cargo</th>
+                <th>Teniente</th>
+                <th>Nombre</th>
+                <th>Nacimiento</th>
+                <th>Nombramiento</th>
+                <th>COD_INE</th>
+            </tr>
+        </tfoot>
         <tbody>
         </tbody>
     </table>
@@ -55,7 +77,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
     <script>
-        // URL del CSV - Cambia el nombre si subes otro archivo
+        // URL del CSV
         const csvUrl = 'https://raw.githubusercontent.com/mario-lozano/GironaMayorsBeta/main/certificados_girona_v.3.2_github_muestra.csv';
         
         console.log('Cargando CSV desde:', csvUrl);
@@ -66,7 +88,7 @@
                 if (!response.ok) {
                     throw new Error('Archivo no encontrado. Verifica que esté subido y que el repositorio sea público.');
                 }
-                return response.text();  // Como es UTF-8, podemos usar .text() directamente
+                return response.text();
             })
             .then(csvText => {
                 console.log('CSV descargado, tamaño:', csvText.length, 'caracteres');
@@ -78,8 +100,6 @@
                     skipEmptyLines: true,
                     complete: function(results) {
                         console.log('CSV parseado. Registros:', results.data.length);
-                        console.log('Columnas:', Object.keys(results.data[0]));
-                        console.log('Primera fila:', results.data[0]);
                         
                         if (results.data.length === 0) {
                             document.getElementById('loader').innerHTML = 
@@ -87,7 +107,7 @@
                             return;
                         }
                         
-                        // Preparar datos para la tabla usando las columnas correctas
+                        // Preparar datos para la tabla
                         const datos = results.data.map(row => [
                             row.id || '',
                             row['año_documento'] || row.año_documento || '',
@@ -105,15 +125,36 @@
                         document.getElementById('tabla-alcaldes').style.display = 'table';
                         
                         // Inicializar DataTables
-                        $('#tabla-alcaldes').DataTable({
+                        const table = $('#tabla-alcaldes').DataTable({
                             data: datos,
                             language: {
                                 url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                             },
-                            order: [[1, 'desc']]  // Ordenar por año descendente por defecto
+                            order: [[1, 'desc']],  // Ordenar por año descendente
+                            initComplete: function () {
+                                // Añadir filtros en el footer de cada columna
+                                this.api()
+                                    .columns()
+                                    .every(function () {
+                                        const column = this;
+                                        const title = column.header().textContent;
+                                        
+                                        // Crear input de búsqueda
+                                        const input = document.createElement('input');
+                                        input.placeholder = 'Filtrar ' + title;
+                                        column.footer().replaceChildren(input);
+                                        
+                                        // Aplicar filtro cuando el usuario escribe
+                                        input.addEventListener('keyup', function () {
+                                            if (column.search() !== this.value) {
+                                                column.search(this.value).draw();
+                                            }
+                                        });
+                                    });
+                            }
                         });
                         
-                        console.log('✓ Tabla creada correctamente');
+                        console.log('✓ Tabla creada con filtros por columna');
                     },
                     error: function(error) {
                         console.error('Error al parsear:', error);
@@ -129,7 +170,7 @@
                     '<strong>Verifica:</strong><br>' +
                     '1. Repositorio público<br>' +
                     '2. Archivo subido correctamente<br>' +
-                    '3. Nombre correcto: certificados_girona_v_3_2_github_muestra.csv<br><br>' +
+                    '3. Nombre correcto del archivo<br><br>' +
                     '<a href="' + csvUrl + '" target="_blank">Probar URL</a>';
             });
     </script>
