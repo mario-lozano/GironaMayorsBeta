@@ -32,12 +32,12 @@
             <tr>
                 <th>ID</th>
                 <th>Año</th>
-                <th>Municipio</th>
+                <th>Ayuntamiento</th>
                 <th>Cargo</th>
                 <th>Nombre</th>
                 <th>Nacimiento</th>
                 <th>Nombramiento</th>
-                <th>Población</th>
+                <th>Edad</th>
                 <th>COD_INE</th>
             </tr>
         </thead>
@@ -55,64 +55,74 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
     <script>
-        // URL del CSV - Ajusta según tu repositorio
-        const csvUrl = 'https://raw.githubusercontent.com/mario-lozano/GironaMayorsBeta/main/certificados__girona_v_3_2_github_muestra.csv';
+        // URL del CSV actualizada
+        const csvUrl = 'https://github.com/mario-lozano/GironaMayorsBeta/raw/refs/heads/main/certificados_%20girona_v.3.2_github_muestra.csv';
         
         console.log('Intentando cargar CSV desde:', csvUrl);
         
-        // Cargar con Papa Parse directamente - deja que el navegador maneje el encoding
-        Papa.parse(csvUrl, {
-            download: true,
-            header: true,
-            delimiter: ";",
-            skipEmptyLines: true,
-            complete: function(results) {
-                console.log('CSV cargado. Registros:', results.data.length);
+        // Probar con windows-1252 que es el más común en Windows
+        fetch(csvUrl)
+            .then(response => response.arrayBuffer())
+            .then(buffer => {
+                // Decodificar con windows-1252
+                const decoder = new TextDecoder('windows-1252');
+                const csvText = decoder.decode(buffer);
                 
-                // Mostrar una muestra en consola para debug
-                if (results.data.length > 0) {
-                    console.log('Primera fila:', results.data[0]);
-                    console.log('Columnas disponibles:', Object.keys(results.data[0]));
-                }
+                console.log('Primeras líneas del CSV:', csvText.substring(0, 200));
                 
-                if (results.data.length === 0) {
-                    document.getElementById('loader').innerHTML = 
-                        'Error: El archivo CSV está vacío.';
-                    return;
-                }
-                
-                // Preparar datos para la tabla
-                // ADAPTADO A LOS NUEVOS NOMBRES DE COLUMNAS
-                const datos = results.data.map(row => [
-                    row.id || '',                                      // ID (ahora en minúsculas)
-                    row['año_documento'] || '',                        // Año (antes era "Año")
-                    row.municipio || '',                                // Municipio (antes era "Ayuntamiento")
-                    row.cargo || '',                                    // Cargo
-                    row.nombre_corregido || row.nombre_original || '', // Nombre (ahora es "nombre_corregido")
-                    row.nacimiento || '',                               // Nacimiento
-                    row.nombramiento || '',                             // Nombramiento
-                    row.censo_hecho || '',                              // Población (antes era "Edad")
-                    row.cod_ine || ''                                   // COD_INE (ahora en minúsculas)
-                ]);
-                
-                // Ocultar loader y mostrar tabla
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('tabla-alcaldes').style.display = 'table';
-                
-                // Inicializar DataTables
-                $('#tabla-alcaldes').DataTable({
-                    data: datos,
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                // Parsear el texto con Papa Parse
+                Papa.parse(csvText, {
+                    header: true,
+                    delimiter: ";",
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        console.log('CSV cargado correctamente. Registros:', results.data.length);
+                        
+                        if (results.data.length === 0) {
+                            document.getElementById('loader').innerHTML = 
+                                'Error: El archivo CSV está vacío o no se pudo leer correctamente.';
+                            return;
+                        }
+                        
+                        // Preparar datos para la tabla
+                        const datos = results.data.map(row => [
+                            row.ID || '',
+                            row['Año'] || row.Ano || '',
+                            row.Ayuntamiento || '',
+                            row.Cargo || '',
+                            row.Nombre || '',
+                            row.Nacimiento || '',
+                            row.Nombramiento || '',
+                            row.Edad || '',
+                            row.COD_INE || ''
+                        ]);
+                        
+                        // Ocultar loader y mostrar tabla
+                        document.getElementById('loader').style.display = 'none';
+                        document.getElementById('tabla-alcaldes').style.display = 'table';
+                        
+                        // Inicializar DataTables
+                        $('#tabla-alcaldes').DataTable({
+                            data: datos,
+                            language: {
+                                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                            }
+                        });
+                        
+                        console.log('Tabla creada exitosamente');
+                    },
+                    error: function(error) {
+                        console.error('Error al parsear CSV:', error);
+                        document.getElementById('loader').innerHTML = 
+                            'Error al procesar los datos: ' + (error.message || 'Desconocido');
                     }
                 });
-            },
-            error: function(error) {
-                console.error('Error:', error);
+            })
+            .catch(error => {
+                console.error('Error al cargar CSV:', error);
                 document.getElementById('loader').innerHTML = 
-                    'Error al cargar los datos: ' + (error.message || 'Desconocido');
-            }
-        });
+                    'Error al cargar los datos: ' + error.message;
+            });
     </script>
 </body>
 </html>
