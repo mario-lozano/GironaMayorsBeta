@@ -57,6 +57,8 @@
     
     <div id="loader">Cargando datos...</div>
     
+    <button id="toggle-filters" style="display:none;">🔍 Mostrar filtros</button>
+    
     <table id="tabla-alcaldes" class="display" style="width:100%; display:none;">
         <thead>
             <tr>
@@ -144,6 +146,21 @@
                         // Ocultar loader y mostrar tabla
                         document.getElementById('loader').style.display = 'none';
                         document.getElementById('tabla-alcaldes').style.display = 'table';
+                        document.getElementById('toggle-filters').style.display = 'inline-block';
+                        
+                        // Funcionalidad para mostrar/ocultar filtros
+                        const toggleBtn = document.getElementById('toggle-filters');
+                        const tableFooter = document.querySelector('#tabla-alcaldes tfoot');
+                        
+                        toggleBtn.addEventListener('click', function() {
+                            if (tableFooter.classList.contains('show-filters')) {
+                                tableFooter.classList.remove('show-filters');
+                                this.textContent = '🔍 Mostrar filtros';
+                            } else {
+                                tableFooter.classList.add('show-filters');
+                                this.textContent = '🔍 Ocultar filtros';
+                            }
+                        });
                         
                         // Inicializar DataTables
                         const table = $('#tabla-alcaldes').DataTable({
