@@ -29,6 +29,27 @@
         tfoot {
             display: table-header-group;
         }
+        /* Ocultar filtros por defecto */
+        #tabla-alcaldes tfoot {
+            display: none;
+        }
+        #tabla-alcaldes tfoot.show-filters {
+            display: table-header-group;
+        }
+        /* Botón para mostrar/ocultar filtros */
+        #toggle-filters {
+            margin-bottom: 10px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #toggle-filters:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
