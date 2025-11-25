@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alcaldes y Concejales de Girona</title>
+    <title>Archivo de la Diputación - Alcaldes y concejales de la provincia</title>
     
     <!-- CSS de DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -15,6 +15,31 @@
             margin: 0;
             padding: 0;
         }
+        /* Cabecera */
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 25px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .header h1 {
+            margin: 0 0 5px 0;
+            font-size: 2.5em;
+            font-weight: bold;
+            border: none;
+            padding: 0;
+        }
+        .header .subtitle {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.8;
+            font-weight: normal;
+        }
         /* Contenedor tipo blog */
         .container {
             max-width: 1200px;
@@ -23,11 +48,18 @@
             background-color: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        h1 {
+        .container h2 {
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid #4CAF50;
+            font-size: 1.8em;
+        }
+        .intro-text {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: justify;
         }
         #loader {
             text-align: center;
@@ -49,19 +81,27 @@
         #tabla-alcaldes tfoot.show-filters {
             display: table-header-group;
         }
-        /* Botón para mostrar/ocultar filtros */
+        /* Botón para mostrar/ocultar filtros - integrado en la tabla */
         #toggle-filters {
-            margin-bottom: 15px;
-            padding: 8px 15px;
-            background-color: #4CAF50;
+            padding: 6px 12px;
+            background-color: #2c3e50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
+            margin-left: 10px;
         }
         #toggle-filters:hover {
-            background-color: #45a049;
+            background-color: #34495e;
+        }
+        /* Ajustar la barra de búsqueda para que esté en línea con el botón */
+        .dataTables_wrapper .dataTables_filter {
+            float: right;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         /* Wrapper para la tabla con scroll horizontal en móviles */
         .table-wrapper {
@@ -73,45 +113,74 @@
             .container {
                 padding: 20px 10px;
             }
-            h1 {
-                font-size: 1.5em;
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .header .subtitle {
+                font-size: 0.8em;
+            }
+            .container h2 {
+                font-size: 1.3em;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Cabecera -->
+    <header class="header">
+        <div class="header-content">
+            <h1>Archivo de la Diputación</h1>
+            <p class="subtitle">Ejemplo piloto de visualización</p>
+        </div>
+    </header>
+    
+    <!-- Contenido principal -->
     <div class="container">
-        <h1>Alcaldes y Concejales de Girona</h1>
+        <h2>Alcaldes y concejales de la provincia</h2>
         
+        <p class="intro-text">
+			El Archivo de la Diputación es una fuente esencial para comprender la historia y el desarrollo de la provincia y de sus municipios. Entre sus fondos destacan los de la Junta Provincial del Censo Electoral, un conjunto documental poco estudiado pero de gran relevancia para conocer la política local en la historia reciente de España. Este órgano fue creado a finales del siglo XIX, y la Ley Electoral de 1907 establecía que su secretario sería el de la diputación provincial y que su patrimonio documental quedaría bajo custodia de la propia institución. Además de la confección del Censo Electoral, la Junta asumía diversas tareas de gestión en los procesos electorales. 
+			En 1977 la Junta Provincial del Censo Electoral fue sustituida por las Juntas Electorales Provinciales cuyos fondos se encuentran  ens archivos judiciales e históricos provinciales.
+		</p>
+
+		<p class="intro-text">
+			En colaboración con el proyecto <em>The appointment and persistence of autocratic local elites: The case of Francoism and the democratic transition in Spain </em>  de la Universidad de Barcelona (UB), hemos digitalizado los <em>“Certificados de composición de hecho”</em> de la provincia correspondientes al periodo 1946–1971. Son documentos oficiales generados durante los procesos de elección de procuradores en Cortes durante el franquismo. En el archivo conservamos certificados de procesos de 1946, 1949, 1952, 1955, 1958, 1961, 1964, 1967 y 1971. Los originales están disponibles <a href="en este enlace:" target="_blank">en este enlace</a>.
+		</p>
+
+		<p class="intro-text">
+			En total son más de 2.500 imágenes de certificados sobre las que los investigadores de la UB han empleado herramientas punteras de ciencia de datos para extraer masivamente la información contenida en ellos. El resultado es una base de datos inédita, con más de 14.000 registros que permite conocer la composición política de cada municipio cada tres años. Se trata de una contribución significativa para historiadores y politólogos que trabajan sobre élites políticas locales en España, pero también para los ayuntamientos de la provincia y la ciudadanía en general.
+		</p>
+		<p class="intro-text">
+			
+			Los datos pueden utilizarse libremente citando adecuadamente a los autores y la base de datos:  <strong>Falcó, A., Lozano, M., Vall, C., & Casadevall, A. (2025). <em>Mayors and councilors in the province of Girona (Spain), 1944–1971</em> [Data set]. Zenodo.</strong> La descarga del fichero completo —con información sobre códigos, fuentes, metodología y otros detalles— está disponible en <a href="https://doi.org/10.0000/fictional-doi" target="_blank">https://doi.org/10.0000/fictional-doi</a>
+		</p>
+
+
         <div id="loader">Cargando datos...</div>
-        
-        <button id="toggle-filters" style="display:none;">🔍 Mostrar filtros</button>
         
         <div class="table-wrapper">
             <table id="tabla-alcaldes" class="display" style="width:100%; display:none;">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Año</th>
                 <th>Municipio</th>
                 <th>Cargo</th>
-                <th>Teniente</th>
                 <th>Nombre</th>
                 <th>Nacimiento</th>
                 <th>Nombramiento</th>
+                <th>Signatura</th>
                 <th>COD_INE</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th>ID</th>
                 <th>Año</th>
                 <th>Municipio</th>
                 <th>Cargo</th>
-                <th>Teniente</th>
                 <th>Nombre</th>
                 <th>Nacimiento</th>
                 <th>Nombramiento</th>
+                <th>Signatura</th>
                 <th>COD_INE</th>
             </tr>
         </tfoot>
@@ -121,8 +190,8 @@
         </div><!-- table-wrapper -->
     </div><!-- container -->
     
-    <footer style="background-color: #333; color: white; text-align: center; padding: 20px; margin-top: 40px;">
-        <p style="margin: 0;">Alcaldes y Concejales de Girona | Base de datos histórica</p>
+    <footer style="background-color: #2c3e50; color: white; text-align: center; padding: 20px; margin-top: 0;">
+        <p style="margin: 0;">Archivo de la Diputación | Base de datos histórica</p>
     </footer>
     
     <!-- jQuery -->
@@ -165,37 +234,21 @@
                             return;
                         }
                         
-                        // Preparar datos para la tabla
+                        // Preparar datos para la tabla (con Signatura, sin ID ni Teniente, COD_INE oculto)
                         const datos = results.data.map(row => [
-                            row.id || '',
-                            row['año_documento'] || row.año_documento || '',
-                            row.municipio || '',
-                            row.cargo || '',
-                            row.teniente || '',
-                            row.nombre_corregido || row.nombre_original || '',
-                            row.nacimiento || '',
-                            row.nombramiento || '',
-                            row.cod_ine || ''
+                            row['año_documento'] || row.año_documento || '',  // 0
+                            row.municipio || '',                               // 1
+                            row.cargo || '',                                   // 2
+                            row.nombre_corregido || row.nombre_original || '', // 3
+                            row.nacimiento || '',                              // 4
+                            row.nombramiento || '',                            // 5
+                            row.signatura || '',                               // 6
+                            row.cod_ine || ''                                  // 7 - oculto pero buscable
                         ]);
                         
                         // Ocultar loader y mostrar tabla
                         document.getElementById('loader').style.display = 'none';
                         document.getElementById('tabla-alcaldes').style.display = 'table';
-                        document.getElementById('toggle-filters').style.display = 'inline-block';
-                        
-                        // Funcionalidad para mostrar/ocultar filtros
-                        const toggleBtn = document.getElementById('toggle-filters');
-                        const tableFooter = document.querySelector('#tabla-alcaldes tfoot');
-                        
-                        toggleBtn.addEventListener('click', function() {
-                            if (tableFooter.classList.contains('show-filters')) {
-                                tableFooter.classList.remove('show-filters');
-                                this.textContent = '🔍 Mostrar filtros';
-                            } else {
-                                tableFooter.classList.add('show-filters');
-                                this.textContent = '🔍 Ocultar filtros';
-                            }
-                        });
                         
                         // Inicializar DataTables
                         const table = $('#tabla-alcaldes').DataTable({
@@ -203,27 +256,67 @@
                             language: {
                                 url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                             },
-                            order: [[1, 'desc']],  // Ordenar por año descendente
+                            order: [[0, 'desc']],  // Ordenar por año descendente
+                            columns: [
+                                { title: 'Año' },
+                                { title: 'Municipio' },
+                                { title: 'Cargo' },
+                                { title: 'Nombre' },
+                                { title: 'Nacimiento' },
+                                { title: 'Nombramiento' },
+                                { title: 'Signatura' },
+                                { title: 'COD_INE', visible: false, searchable: true }  // Oculto pero buscable
+                            ],
                             initComplete: function () {
-                                // Añadir filtros en el footer de cada columna
-                                this.api()
-                                    .columns()
-                                    .every(function () {
-                                        const column = this;
-                                        const title = column.header().textContent;
+                                // Añadir filtros en el footer de cada columna visible
+                                const api = this.api();
+                                
+                                api.columns().every(function () {
+                                    const column = this;
+                                    const columnIndex = column.index();
+                                    
+                                    // Solo añadir filtro si la columna es visible
+                                    if (column.visible()) {
+                                        const header = $(column.header());
+                                        const title = header.text();
+                                        const footer = $(column.footer());
                                         
                                         // Crear input de búsqueda
-                                        const input = document.createElement('input');
-                                        input.placeholder = 'Filtrar ' + title;
-                                        column.footer().replaceChildren(input);
+                                        const input = $('<input type="text" placeholder="Filtrar ' + title + '" />');
+                                        footer.html(input);
                                         
                                         // Aplicar filtro cuando el usuario escribe
-                                        input.addEventListener('keyup', function () {
+                                        input.on('keyup change', function () {
                                             if (column.search() !== this.value) {
                                                 column.search(this.value).draw();
                                             }
                                         });
-                                    });
+                                    }
+                                });
+                                
+                                // Crear botón de filtros e insertarlo en la barra de búsqueda
+                                const toggleBtn = document.createElement('button');
+                                toggleBtn.id = 'toggle-filters';
+                                toggleBtn.innerHTML = '🔍 Más filtros';
+                                
+                                // Insertar el botón en la barra de búsqueda
+                                const searchDiv = document.querySelector('.dataTables_filter');
+                                if (searchDiv) {
+                                    searchDiv.appendChild(toggleBtn);
+                                }
+                                
+                                // Funcionalidad para mostrar/ocultar filtros
+                                const tableFooter = document.querySelector('#tabla-alcaldes tfoot');
+                                
+                                toggleBtn.addEventListener('click', function() {
+                                    if (tableFooter.classList.contains('show-filters')) {
+                                        tableFooter.classList.remove('show-filters');
+                                        this.innerHTML = '🔍 Más filtros';
+                                    } else {
+                                        tableFooter.classList.add('show-filters');
+                                        this.innerHTML = '🔍 Menos filtros';
+                                    }
+                                });
                             }
                         });
                         
