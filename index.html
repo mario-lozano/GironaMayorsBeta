@@ -139,20 +139,20 @@
         <h2>Alcaldes y concejales de la provincia</h2>
         
         <p class="intro-text">
-			El Archivo de la Diputación es una fuente esencial para comprender la historia y el desarrollo de la provincia y de sus municipios. Entre sus fondos destacan los de la Junta Provincial del Censo Electoral, un conjunto documental poco estudiado pero de gran relevancia para conocer la política local en la historia reciente de España. Este órgano fue creado a finales del siglo XIX. La Ley Electoral de 1907 estableció que su secretario fuera el de la diputación provincial y que su patrimonio documental estuviera custodiado por la misma institución. Además de elaborar el Censo Electoral, la Junta asumía diversas tareas de gestión en los procesos electorales. 
-			En 1977 la Junta Provincial del Censo Electoral fue sustituida por las Juntas Electorales Provinciales cuyos fondos se encuentran  ens archivos judiciales e históricos provinciales.
+			El Archivo de la Diputación constituye una fuente imprescindible para comprender la evolución histórica de la provincia y de sus municipios. Entre sus numerosos fondos conservamos los generados por la Junta Provincial del Censo Electoral, de gran valor para el estudio de la política local de [la provincia]. Este órgano, creado a finales del siglo XIX, compartía por ley secretario con la Diputación, razón por la cual su documentación se conserva también en nuestro archivo.
+			Además de elaborar el Censo Electoral, la Junta desempeñaba diversas funciones de gestión y supervisión en los procesos electorales hasta 1977, año en que fue sustituida por las Juntas Electorales Provinciales, cuyos fondos se conservan actualmente en los archivos judiciales e históricos provinciales.
 		</p>
 
 		<p class="intro-text">
-			En colaboración con el proyecto <em>The appointment and persistence of autocratic local elites</em>  de la Universidad de Barcelona (UB), hemos digitalizado los “Certificados de composición de hecho” de la provincia correspondientes al periodo 1946–1971. Son documentos oficiales generados durante los procesos de elección de procuradores en Cortes durante el franquismo, en los que se acreditaban quienes eran alcaldes y concejales de cada municipio. En el archivo conservamos certificados de procesos de 1946, 1949, 1952, 1955, 1958, 1961, 1964, 1967 y 1971. Los originales están disponibles <a href="en este enlace:" target="_blank">en este enlace</a>.
+			En colaboración con el proyecto <em>The appointment and persistence of autocratic local elites</em> de la Universidad de Barcelona (UB), hemos digitalizado parte de esta documentación, concretamente los "Certificados de composición de hecho" de la provincia. Se trata de documentos generados durante los procesos de elección de los procuradores franquistas, en los que se reflejaba quiénes eran los alcaldes y concejales de cada municipio en el momento de la renovación. En el archivo conservamos certificados de procesos de [1946, 1949, 1952, 1955, 1958, 1961, 1964, 1967 y 1971]. Los originales están disponibles <a href="" target="_blank">en este enlace</a>.
 		</p>
 
 		<p class="intro-text">
-			En total son más de 2.500 imágenes sobre las que los investigadores de la UB han empleado herramientas punteras de ciencia de datos para extraer masivamente su información. El resultado es una base de datos inédita, con más de 14.000 registros que permite conocer la composición política de cada municipio cada tres años. Se trata de una contribución significativa para historiadores y politólogos que trabajan sobre élites políticas locales en España, pero también para los ayuntamientos de la provincia y la ciudadanía en general.
+			En total son 2.753 imágenes sobre las que los investigadores de la UB han empleado herramientas punteras de ciencia de datos para extraer masivamente su información. El resultado es una base de datos inédita, con 16.228 registros que permite conocer la composición política de cada municipio cada tres años. Se trata de una contribución significativa para historiadores y politólogos que trabajan sobre élites políticas locales, pero también para los ayuntamientos de la provincia y la ciudadanía en general.
 		</p>
 		<p class="intro-text">
 			
-			Los datos pueden utilizarse libremente citando adecuadamente a los autores y la base de datos:  <strong>Falcó, A., Lozano, M., Vall, C., & Casadevall, A. (2025). <em>Mayors and Municipal Councilors in Francoist Spain (1939–1979)</em> [Data set]. Zenodo.</strong> La descarga del fichero completo de toda España —con información sobre códigos, fuentes, metodología y otros detalles— está disponible en <a href="https://doi.org/10.0000/fictional-doi" target="_blank">https://doi.org/10.0000/fictional-doi</a>
+			Los datos pueden utilizarse libremente citando adecuadamente a los autores y la base de datos:  <strong>Lozano Martín, L. M., Casadevall Bover, A., Vall-Prat, P., & Falcó-Gimeno, A. (2025). <em>Spanish Municipal Councils during Francoism (1939–1976)</em> (1.0) [Data set]. Zenodo.</strong> La descarga del fichero completo de toda España —con información sobre códigos, fuentes, metodología y otros detalles— está disponible en <a href="https://doi.org/10.5281/zenodo.17860120" target="_blank">https://doi.org/10.5281/zenodo.17860120</a>
 		</p>
 
 
@@ -162,24 +162,24 @@
             <table id="tabla-alcaldes" class="display" style="width:100%; display:none;">
         <thead>
             <tr>
-                <th>Año</th>
+                <th>Observación</th>
                 <th>Municipio</th>
                 <th>Cargo</th>
                 <th>Nombre</th>
                 <th>Nacimiento</th>
-                <th>Nombramiento</th>
+                <th>Posesión</th>
                 <th>Signatura</th>
                 <th>COD_INE</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th>Año</th>
+                <th>Observación</th>
                 <th>Municipio</th>
                 <th>Cargo</th>
                 <th>Nombre</th>
                 <th>Nacimiento</th>
-                <th>Nombramiento</th>
+                <th>Posesión</th>
                 <th>Signatura</th>
                 <th>COD_INE</th>
             </tr>
@@ -203,9 +203,13 @@
     <!-- Papa Parse para leer CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
+    <!-- Moment.js y plugin de fechas para DataTables -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.6/sorting/datetime-moment.js"></script>
+    
     <script>
         // URL del CSV
-        const csvUrl = 'https://raw.githubusercontent.com/mario-lozano/GironaMayorsBeta/main/certificados_girona_v.3.2_github_muestra.csv';
+        const csvUrl = 'https://raw.githubusercontent.com/mario-lozano/GironaMayorsBeta/main/SMC_F_1.0.csv';
         
         console.log('Cargando CSV desde:', csvUrl);
         
@@ -234,21 +238,32 @@
                             return;
                         }
                         
-                        // Preparar datos para la tabla (con Signatura, sin ID ni Teniente, COD_INE oculto)
-                        const datos = results.data.map(row => [
-                            row['año_documento'] || row.año_documento || '',  // 0
-                            row.municipio || '',                               // 1
-                            row.cargo || '',                                   // 2
-                            row.nombre_corregido || row.nombre_original || '', // 3
-                            row.nacimiento || '',                              // 4
-                            row.nombramiento || '',                            // 5
-                            row.signatura || '',                               // 6
-                            row.cod_ine || ''                                  // 7 - oculto pero buscable
+                        // Filtrar solo registros del archivo de Girona (ES.17079.AD)
+                        const datosFiltrados = results.data.filter(row => 
+                            row.archive_code === 'ES.17079.AD'
+                        );
+                        
+                        console.log('Registros filtrados (ES.17079.AD):', datosFiltrados.length);
+                        
+                        // Preparar datos para la tabla (nuevas cabeceras del CSV)
+                        const datos = datosFiltrados.map(row => [
+                            row.document_creation_year || '',                  // 0 - Observación
+                            row.municipality || '',                            // 1 - Municipio
+                            row.position || '',                                // 2 - Cargo
+                            row.name_standardized || row.name_original || '',  // 3 - Nombre
+                            row.birth_date || '',                              // 4 - Nacimiento
+                            row.assumption_date || '',                          // 5 - Posesión
+                            row.reference_code || '',                          // 6 - Signatura
+                            row.ine_code || ''                                 // 7 - COD_INE (oculto pero buscable)
                         ]);
                         
                         // Ocultar loader y mostrar tabla
                         document.getElementById('loader').style.display = 'none';
                         document.getElementById('tabla-alcaldes').style.display = 'table';
+                        
+                        // Configurar formatos de fecha para ordenación correcta
+                        $.fn.dataTable.moment('DD/MM/YYYY');
+                        $.fn.dataTable.moment('YYYY');
                         
                         // Inicializar DataTables
                         const table = $('#tabla-alcaldes').DataTable({
@@ -256,14 +271,14 @@
                             language: {
                                 url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
                             },
-                            order: [[0, 'desc']],  // Ordenar por año descendente
+                            order: [[0, 'desc']],  // Ordenar por observación descendente
                             columns: [
-                                { title: 'Año' },
+                                { title: 'Observación' },
                                 { title: 'Municipio' },
                                 { title: 'Cargo' },
                                 { title: 'Nombre' },
                                 { title: 'Nacimiento' },
-                                { title: 'Nombramiento' },
+                                { title: 'Posesión' },
                                 { title: 'Signatura' },
                                 { title: 'COD_INE', visible: false, searchable: true }  // Oculto pero buscable
                             ],
