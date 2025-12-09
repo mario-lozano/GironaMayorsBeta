@@ -15,12 +15,31 @@
             margin: 0;
             padding: 0;
         }
+        /* Selector de idioma */
+        .language-switch {
+            position: absolute;
+            top: 25px;
+            right: 20px;
+        }
+        .language-switch a {
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .language-switch a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
         /* Cabecera */
         .header {
             background-color: #2c3e50;
             color: white;
             padding: 25px 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
         }
         .header-content {
             max-width: 1200px;
@@ -131,6 +150,9 @@
         <div class="header-content">
             <h1>Archivo de la Diputación</h1>
             <p class="subtitle">Ejemplo piloto de visualización</p>
+        </div>
+        <div class="language-switch">
+            <a href="index_ca.html">Català</a>
         </div>
     </header>
     
